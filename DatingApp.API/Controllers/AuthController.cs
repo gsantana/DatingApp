@@ -29,6 +29,9 @@ namespace DatingApp.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody]UserForRegister userForResister)
         {
+            if (!string.IsNullOrEmpty(userForResister.Username))
+                userForResister.Username = userForResister.Username.ToLower();
+
             if (await Repo.UserExistsAsync(userForResister.Username))
                 ModelState.AddModelError("Username", "User is already taken");
 
@@ -47,6 +50,7 @@ namespace DatingApp.API.Controllers
         {
             var userFromRepo = Repo.Login(userForLogin.Username.ToLower(), userForLogin.Password);
 
+            //throw new Exception("error bla bla bla");
             if (userFromRepo == null)
                 return Unauthorized();
 
