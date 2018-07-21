@@ -4,12 +4,14 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import { Observable } from 'rxjs/Observable';
-import { tokenNotExpired } from 'angular2-jwt';
+import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 
 @Injectable()
 export class AuthService {
-    baseUrl = "http://localhost:50092/api/auth/";
+    baseUrl = 'http://192.168.109.128:50092/api/auth/';
     userToken: any;
+    decodeToken: any;
+    jwtHelper: JwtHelper = new JwtHelper();
 
 constructor(private http: Http) { }
 
@@ -17,9 +19,11 @@ constructor(private http: Http) { }
        return this.http.post(this.baseUrl + 'login', model, this.requestOptions())
        .map((response: Response) => {
            const user = response.json();
-           if (user) {
+           if (user && user.tokenstring) {
                localStorage.setItem('token', user.tokenstring);
+               this.decodeToken = this.jwtHelper.decodeToken(user.tokenstring);
                this.userToken = user.tokenstring;
+               console.log(this.decodeToken);
            }
      }).catch(this.handleError);
    }

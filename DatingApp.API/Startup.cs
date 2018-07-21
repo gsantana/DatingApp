@@ -28,9 +28,9 @@ namespace DatingApp.API
         public void ConfigureServices(IServiceCollection services)
         {
             var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value);
+            services.AddCors();
             services.AddMvc();
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("Default")));
-            services.AddCors();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -58,6 +58,7 @@ namespace DatingApp.API
                    builder.Run(async context =>
                    {
                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError; ;
+                       context.Response.AddErrorHeaders();
 
                        var error = context.Features.Get<IExceptionHandlerFeature>();
                        if (error != null)

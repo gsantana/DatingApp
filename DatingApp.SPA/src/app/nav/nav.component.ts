@@ -9,6 +9,7 @@ import { AuthService } from '../services/auth.service';
 })
 export class NavComponent implements OnInit {
   model: any = {};
+  login_name = '';
 
   constructor(private authService: AuthService, private alertify: AlertifyService) { }
 
@@ -17,7 +18,8 @@ export class NavComponent implements OnInit {
 
   login() {
     this.authService.login(this.model).subscribe(data => {
-      this.alertify.success('logged in sucessfully')
+      this.alertify.success('logged in sucessfully' + this.authService.decodeToken.unique_name);
+      this.login_name = this.authService.decodeToken.unique_name;
     }, error => {
       this.alertify.error('login failed' + error);
     });
