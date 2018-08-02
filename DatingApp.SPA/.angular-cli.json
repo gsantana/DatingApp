@@ -20,10 +20,10 @@
       "prefix": "app",
       "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap.min.css",
+        "../node_modules/bootswatch/dist/united/bootstrap.min.css",
         "../node_modules/font-awesome/css/font-awesome.min.css",
         "../node_modules/alertifyjs/build/css/alertify.min.css",
         "../node_modules/alertifyjs/build/css/themes/bootstrap.min.css",
-        "../node_modules/bootswatch/united/bootstrap.min.css",
         "styles.css"
       ],
       "scripts": [

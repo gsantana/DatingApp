@@ -1,4 +1,5 @@
-﻿using DatingApp.API.Data;
+﻿using AutoMapper;
+using DatingApp.API.Data;
 using DatingApp.API.Dtos;
 using DatingApp.API.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +18,13 @@ namespace DatingApp.API.Controllers
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
-        public AuthController(IAuthRepository repo, IConfiguration config)
+        private readonly IMapper mapper;
+
+        public AuthController(IAuthRepository repo, IConfiguration config, IMapper mapper)
         {
             Repo = repo;
             Config = config;
+            this.mapper = mapper;
         }
 
         private IAuthRepository Repo { get; }
@@ -61,7 +65,7 @@ namespace DatingApp.API.Controllers
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
-                    new Claim(ClaimTypes.Name, userFromRepo.Username)
+                    new Claim(ClaimTypes.Name, userFromRepo.Username),
                 }
                 ),
                 Expires = DateTime.Now.AddDays(1),
@@ -71,7 +75,11 @@ namespace DatingApp.API.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenstring = tokenHandler.WriteToken(token);
 
-            return Ok(new { tokenstring });
+            var user = mapper.Map<UserForListDto>(userFromRepo);
+
+            return Ok(new {
+                tokenstring,
+                user});
         }
 
 

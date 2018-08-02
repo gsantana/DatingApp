@@ -20,7 +20,7 @@ namespace DatingApp.API
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseUrls("http://0.0.0.0:50092")
+                //.UseUrls("http://0.0.0.0:50092")
                 .Build();
     }
 }

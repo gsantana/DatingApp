@@ -15,7 +15,7 @@ namespace DatingApp.API.Data
 
         public User Login(string username, string password)
         {
-            var user = _dataContext.Users.FirstOrDefaultAsync(x => x.Username == username).Result;
+            var user = _dataContext.Users.Include(p => p.Photos).FirstOrDefaultAsync(x => x.Username == username).Result;
 
             if (user == null)
                 return null;
@@ -44,6 +44,7 @@ namespace DatingApp.API.Data
         {
             return await _dataContext.Users.AnyAsync(x => x.Username == username);
         }
+
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
